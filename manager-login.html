@@ -2,29 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Manager Login</title>
+    <title>Google Sheets 資料讀取</title>
 </head>
 <body>
-    <div class="login">
-        <form id="form1" name="form1" method="post" action="manager-login.php">
-            <h2>管理員登入</h2>
-            <div class="group">
-                <label for="manager_id">帳號</label>
-                <input type="text" name="manager_id" id="manager_id">
-            </div>
 
-            <div class="group">
-                <label for="manager_password">密碼</label>
-                <input type="password" name="manager_password" id="manager_password">
-            </div>
+<h1>Google Sheets 資料</h1>
 
-            <label>
-                <input type="submit" name="button" id="button" value="確認" />&nbsp;&nbsp;
-            </label>
-            <label>
-                <input type="reset" name="button2" id="button2" value="重設" />
-            </label>
-        </form>
-    </div>
+<div id="data-container">
+    <!-- 這裡將顯示從Google Sheets讀取的資料 -->
+</div>
+
+<script>
+    // Google Sheets 的公開連結
+    const sheetURL = 'https://docs.google.com/spreadsheets/d/1oI1IHArAIkYncMXdxUzDeGPaLoQv0Quup4HLlfnsJEg/edit?usp=sharing';
+
+    // 使用JavaScript讀取Google Sheets資料
+    fetch(sheetURL)
+        .then(response => response.json())
+        .then(data => {
+            // 處理和顯示資料
+            displayData(data);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+
+    function displayData(data) {
+        const container = document.getElementById('data-container');
+        
+        // 清空容器
+        container.innerHTML = '';
+
+        // 顯示資料
+        data.feed.entry.forEach(entry => {
+            const cellData = entry.content.$t;
+            const cellElement = document.createElement('p');
+            cellElement.textContent = cellData;
+            container.appendChild(cellElement);
+        });
+    }
+</script>
+
 </body>
 </html>
